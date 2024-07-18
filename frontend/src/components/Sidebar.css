@@ -1,0 +1,12 @@
+/* Sidebar.css */
+
+.sidebar-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Set sidebar height to full viewport height */
+  overflow: auto; /* Enable scrolling if content exceeds sidebar height */
+}
+
+.sidebar-content {
+  flex: 1; /* Ensure sidebar content takes remaining height */
+}

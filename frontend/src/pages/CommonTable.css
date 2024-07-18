@@ -1,0 +1,46 @@
+/* src/styles/CommonTable.css */
+
+.table-container {
+  overflow-x: auto;
+  padding: 10px;
+  width: 100%; /* Ensure the table container doesn't exceed parent's width */
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+.table-th {
+  background-color: lightgray;
+  padding: 10px;
+  text-align: left;
+}
+
+.table-td {
+  background-color: white;
+  padding: 10px;
+  height: 1.5em; /* Set height to match the line height of the font */
+  line-height: 1.5em; /* Ensure line height matches font size */
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.pagination button {
+  margin: 0 2px;
+  padding: 5px 10px;
+  border: none;
+  background-color: #f1f1f1;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pagination button.active {
+  background-color: #06368e;
+  color: white;
+}

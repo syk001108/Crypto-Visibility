@@ -1,0 +1,423 @@
+// 데이터 삽입 스크립트 예시
+const mongoose = require('mongoose');
+
+// MongoDB 연결 설정
+mongoose.connect('mongodb://localhost:27017/mydatabase');
+
+// 로그 데이터 스키마 정의
+const logDataSchema = new mongoose.Schema({
+  date: String,
+  source: String,
+  destination: String,
+  encryptionStatus: String,
+  tlsVersion: String,
+  cipherSuite: String,
+  certSignatureAlgorithm: String,
+  ellipticCurve: String,
+  skeSignatureAlgorithm: String,
+  tlsVersionVulnerability: Number,
+  cipherSuiteVulnerability: Number,
+  certSignatureAlgorithmVulnerability: Number,
+  ellipticCurveVulnerability: Number,
+  skeSignatureAlgorithmVulnerability: Number,
+});
+
+// MongoDB 모델 생성
+const LogData = mongoose.model('LogData', logDataSchema);
+
+// 예시 데이터
+const logData = [
+  {
+    "date": "2024-07-16 18:19:11",
+    "source": "google.com",
+    "destination": "Pod / apache-987654-5",
+    "encryptionStatus": "Secure",
+    "tlsVersion": "TLS 1.3",
+    "cipherSuite": "TLS_CHACHA20_POLY1305_SHA256",
+    "certSignatureAlgorithm": "",
+    "ellipticCurve": "",
+    "skeSignatureAlgorithm": "",
+    "tlsVersionVulnerability": 0,
+    "cipherSuiteVulnerability": 0,
+    "certSignatureAlgorithmVulnerability": 2,
+    "ellipticCurveVulnerability": 2,
+    "skeSignatureAlgorithmVulnerability": 2,
+  },
+  {
+    "date": "2024-07-16 18:19:21",
+    "source": "Pod / apache-987654-5",
+    "destination": "google.com",
+    "encryptionStatus": "Secure",
+    "tlsVersion": "TLS 1.3",
+    "cipherSuite": "TLS_CHACHA20_POLY1305_SHA256",
+    "certSignatureAlgorithm": "",
+    "ellipticCurve": "",
+    "skeSignatureAlgorithm": "",
+    "tlsVersionVulnerability": 0,
+    "cipherSuiteVulnerability": 0,
+    "certSignatureAlgorithmVulnerability": 2,
+    "ellipticCurveVulnerability": 2,
+    "skeSignatureAlgorithmVulnerability": 2,
+  },
+  {
+    "date": "2024-07-16 18:21:09",
+    "source": "Pod / nginx-876543-4",
+    "destination": "support.example.com",
+    "encryptionStatus": "Insecure",
+    "tlsVersion": "TLS 1.2",
+    "cipherSuite": "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
+    "certSignatureAlgorithm": "sha256WithRSAEncryption",
+    "ellipticCurve": "secp256r1",
+    "skeSignatureAlgorithm": "rsa_pkcs1_sha256",
+    "tlsVersionVulnerability": 1,
+    "cipherSuiteVulnerability": 1,
+    "certSignatureAlgorithmVulnerability": 1,
+    "ellipticCurveVulnerability": 1,
+    "skeSignatureAlgorithmVulnerability": 1,
+  },
+  {
+    "date": "2024-07-16 18:24:13",
+    "source": "Pod / apache-234567-3",
+    "destination": "forum.example.com",
+    "encryptionStatus": "Secure",
+    "tlsVersion": "TLS 1.3",
+    "cipherSuite": "TLS_CHACHA20_POLY1305_SHA256",
+    "certSignatureAlgorithm": "",
+    "ellipticCurve": "",
+    "skeSignatureAlgorithm": "",
+    "tlsVersionVulnerability": 0,
+    "cipherSuiteVulnerability": 0,
+    "certSignatureAlgorithmVulnerability": 2,
+    "ellipticCurveVulnerability": 2,
+    "skeSignatureAlgorithmVulnerability": 2,
+  },
+  {
+    "date": "2024-07-16 18:25:06",
+    "source": "google.com",
+    "destination": "Pod / apache-827346-1",
+    "encryptionStatus": "Insecure",
+    "tlsVersion": "TLS 1.2",
+    "cipherSuite": "TLS_SRP_SHA_DSS_WITH_3DES_EDE_CBC_SHA",
+    "certSignatureAlgorithm": "sha256WithRSAEncryption",
+    "ellipticCurve": "not_applicable",
+    "skeSignatureAlgorithm": "rsa_pkcs1_sha256",
+    "tlsVersionVulnerability": 1,
+    "cipherSuiteVulnerability": 2,
+    "certSignatureAlgorithmVulnerability": 1,
+    "ellipticCurveVulnerability": 2,
+    "skeSignatureAlgorithmVulnerability": 1,
+  },
+  {
+    "date": "2024-07-16 18:25:33",
+    "source": "Pod / apache-987654-2",
+    "destination": "",
+    "encryptionStatus": "None",
+    "tlsVersion": "",
+    "cipherSuite": "",
+    "certSignatureAlgorithm": "",
+    "ellipticCurve": "",
+    "skeSignatureAlgorithm": "",
+    "tlsVersionVulnerability": 2,
+    "cipherSuiteVulnerability": 2,
+    "certSignatureAlgorithmVulnerability": 2,
+    "ellipticCurveVulnerability": 2,
+    "skeSignatureAlgorithmVulnerability": 2,
+  },
+  {
+    "date": "2024-07-16 18:26:28",
+    "source": "Pod / nginx-876543-3",
+    "destination": "auth.example.com",
+    "encryptionStatus": "Insecure",
+    "tlsVersion": "TLS 1.2",
+    "cipherSuite": "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
+    "certSignatureAlgorithm": "sha256WithRSAEncryption",
+    "ellipticCurve": "secp256r1",
+    "skeSignatureAlgorithm": "rsa_pkcs1_sha256",
+    "tlsVersionVulnerability": 1,
+    "cipherSuiteVulnerability": 1,
+    "certSignatureAlgorithmVulnerability": 1,
+    "ellipticCurveVulnerability": 1,
+    "skeSignatureAlgorithmVulnerability": 1,
+  },
+  {
+    "date": "2024-07-16 18:26:44",
+    "source": "Pod / apache-123456-4",
+    "destination": "store.example.com",
+    "encryptionStatus": "Secure",
+    "tlsVersion": "TLS 1.3",
+    "cipherSuite": "TLS_AES_128_GCM_SHA256",
+    "certSignatureAlgorithm": "",
+    "ellipticCurve": "",
+    "skeSignatureAlgorithm": "",
+    "tlsVersionVulnerability": 0,
+    "cipherSuiteVulnerability": 0,
+    "certSignatureAlgorithmVulnerability": 2,
+    "ellipticCurveVulnerability": 2,
+    "skeSignatureAlgorithmVulnerability": 2,
+  },
+  {
+    "date": "2024-07-16 18:27:34",
+    "source": "Pod / nginx-732189-2",
+    "destination": "Pod / apache-437889-2",
+    "encryptionStatus": "Insecure",
+    "tlsVersion": "TLS 1.2",
+    "cipherSuite": "TLS_ECDHE_ECDSA_WITH_3DES_EDE_CBC_SHA",
+    "certSignatureAlgorithm": "sha384WithRSAEncryption",
+    "ellipticCurve": "secp384r1",
+    "skeSignatureAlgorithm": "ecdhe_ecdsa_secp384r1_sha384",
+    "tlsVersionVulnerability": 1,
+    "cipherSuiteVulnerability": 2,
+    "certSignatureAlgorithmVulnerability": 0,
+    "ellipticCurveVulnerability": 2,
+    "skeSignatureAlgorithmVulnerability": 2,
+  },
+  {
+    "date": "2024-07-16 18:27:53",
+    "source": "Pod / apache-523412-1",
+    "destination": "dashboard.example.com",
+    "encryptionStatus": "None",
+    "tlsVersion": "",
+    "cipherSuite": "",
+    "certSignatureAlgorithm": "",
+    "ellipticCurve": "",
+    "skeSignatureAlgorithm": "",
+    "tlsVersionVulnerability": 2,
+    "cipherSuiteVulnerability": 2,
+    "certSignatureAlgorithmVulnerability": 2,
+    "ellipticCurveVulnerability": 2,
+    "skeSignatureAlgorithmVulnerability": 2,
+  },
+  {
+    "date": "2024-07-16 18:28:16",
+    "source": "Pod / nginx-982346-3",
+    "destination": "mail.example.com",
+    "encryptionStatus": "Insecure",
+    "tlsVersion": "TLS 1.2",
+    "cipherSuite": "TLS_DH_anon_WITH_3DES_EDE_CBC_SHA",
+    "certSignatureAlgorithm": "sha256WithRSAEncryption",
+    "ellipticCurve": "secp256r1",
+    "skeSignatureAlgorithm": "rsa_pkcs1_sha256",
+    "tlsVersionVulnerability": 1,
+    "cipherSuiteVulnerability": 2,
+    "certSignatureAlgorithmVulnerability": 1,
+    "ellipticCurveVulnerability": 1,
+    "skeSignatureAlgorithmVulnerability": 1,
+  },
+  {
+    "date": "2024-07-16 18:28:43",
+    "source": "Pod / apache-712397-2",
+    "destination": "Pod / ngiinx-545397-2",
+    "encryptionStatus": "Secure",
+    "tlsVersion": "TLS 1.3",
+    "cipherSuite": "TLS_AES_256_GCM_SHA384",
+    "certSignatureAlgorithm": "",
+    "ellipticCurve": "",
+    "skeSignatureAlgorithm": "",
+    "tlsVersionVulnerability": 0,
+    "cipherSuiteVulnerability": 0,
+    "certSignatureAlgorithmVulnerability": 2,
+    "ellipticCurveVulnerability": 2,
+    "skeSignatureAlgorithmVulnerability": 2,
+  },
+  {
+    "date": "2024-07-16 18:29:20",
+    "source": "Pod / ngiinx-643328-1",
+    "destination": "drive.google.com",
+    "encryptionStatus": "Secure",
+    "tlsVersion": "TLS 1.2",
+    "cipherSuite": "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256",
+    "certSignatureAlgorithm": "sha256WithRSAEncryption",
+    "ellipticCurve": "x25519",
+    "skeSignatureAlgorithm": "ecdhe_secp256r1_sha256",
+    "tlsVersionVulnerability": 1,
+    "cipherSuiteVulnerability": 1,
+    "certSignatureAlgorithmVulnerability": 1,
+    "ellipticCurveVulnerability": 0,
+    "skeSignatureAlgorithmVulnerability": 0,
+  },
+];
+
+// 로그 데이터 스키마 정의
+const keyDataSchema = new mongoose.Schema({
+  date: String,
+  sans: String,
+  ttl: String,
+  client: String,
+  status: String,
+});
+
+// MongoDB 모델 생성
+const KeyData = mongoose.model('KeyData', keyDataSchema);
+
+// 예시 데이터
+const keyData = [
+  {
+    date: '2024-07-16 18:28:43',
+    sans: 'spiffe://cluster.local/ns/default/sa/web',
+    ttl: '12h0m0s',
+    client: 'Pod / apache-982341-2',
+    status: 'Created',
+  },
+  {
+    date: '2024-07-16 18:29:20',
+    sans: 'spiffe://cluster.local/ns/default/sa/default',
+    ttl: '24h0m0s',
+    client: 'Pod / nginx-643328-1',
+    status: 'Created',
+  },
+  {
+    date: '2024-07-16 18:28:16',
+    sans: 'spiffe://cluster.local/ns/default/sa/api',
+    ttl: '1h0m0s',
+    client: 'Pod / nginx-643328-1',
+    status: 'Created',
+  },
+  {
+    date: '2024-07-16 18:27:53',
+    sans: 'spiffe://cluster.local/ns/default/sa/backend',
+    ttl: '6h0m0s',
+    client: 'Pod / apache-982341-2',
+    status: 'Renewed',
+  },
+  {
+    date: '2024-07-16 18:27:34',
+    sans: '',
+    ttl: '',
+    client: 'Pod / nginx-643328-1',
+    status: 'Expired',
+  },
+  {
+    date: '2024-07-16 18:26:44',
+    sans: 'spiffe://cluster.local/ns/default/sa/db',
+    ttl: '48h0m0s',
+    client: 'Pod / apache-982341-2',
+    status: 'Created',
+  },
+  {
+    date: '2024-07-16 18:26:28',
+    sans: 'spiffe://cluster.local/ns/default/sa/storage',
+    ttl: '72h0m0s',
+    client: 'Pod / nginx-643328-1',
+    status: 'Renewed',
+  },
+  {
+    date: '2024-07-16 18:25:33',
+    sans: '',
+    ttl: '',
+    client: 'Pod / apache-982341-2',
+    status: 'Expired',
+  },
+  {
+    date: '2024-07-16 18:25:06',
+    sans: 'spiffe://cluster.local/ns/default/sa/load-balancer',
+    ttl: '24h0m0s',
+    client: 'Pod / nginx-643328-1',
+    status: 'Created',
+  },
+  {
+    date: '2024-07-16 18:24:13',
+    sans: 'spiffe://cluster.local/ns/default/sa/metrics',
+    ttl: '12h0m0s',
+    client: 'Pod / apache-982341-2',
+    status: 'Created',
+  },
+  {
+    date: '2024-07-16 18:21:09',
+    sans: 'spiffe://cluster.local/ns/default/sa/security',
+    ttl: '8h0m0s',
+    client: 'Pod / nginx-643328-1',
+    status: 'Created',
+  },
+  {
+    date: '2024-07-16 18:19:21',
+    sans: 'spiffe://cluster.local/ns/default/sa/analytics',
+    ttl: '18h0m0s',
+    client: 'Pod / apache-982341-2',
+    status: 'Created',
+  },
+  {
+    date: '2024-07-16 18:18:33',
+    sans: 'spiffe://cluster.local/ns/default/sa/monitoring',
+    ttl: '4h0m0s',
+    client: 'Pod / nginx-643328-1',
+    status: 'Created',
+  },
+  {
+    date: '2024-07-16 18:17:44',
+    sans: 'spiffe://cluster.local/ns/default/sa/logging',
+    ttl: '20h0m0s',
+    client: 'Pod / apache-982341-2',
+    status: 'Created',
+  },
+  {
+    date: '2024-07-16 18:16:56',
+    sans: 'spiffe://cluster.local/ns/default/sa/audit',
+    ttl: '16h0m0s',
+    client: 'Pod / nginx-643328-1',
+    status: 'Created',
+  },
+  {
+    date: '2024-07-16 18:16:08',
+    sans: 'spiffe://cluster.local/ns/default/sa/alerting',
+    ttl: '10h0m0s',
+    client: 'Pod / apache-982341-2',
+    status: 'Created',
+  },
+
+  {
+    date: '2024-07-16 18:15:20',
+    sans: 'spiffe://cluster.local/ns/default/sa/policy',
+    ttl: '6h0m0s',
+    client: 'Pod / nginx-643328-1',
+    status: 'Created',
+  },
+  {
+    date: '2024-07-16 18:14:32',
+    sans: 'spiffe://cluster.local/ns/default/sa/compliance',
+    ttl: '15h0m0s',
+    client: 'Pod / apache-982341-2',
+    status: 'Created',
+  },
+  {
+    date: '2024-07-16 18:13:44',
+    sans: 'spiffe://cluster.local/ns/default/sa/authorization',
+    ttl: '9h0m0s',
+    client: 'Pod / nginx-643328-1',
+    status: 'Created',
+  },
+  {
+    date: '2024-07-16 18:12:56',
+    sans: 'spiffe://cluster.local/ns/default/sa/identity',
+    ttl: '24h0m0s',
+    client: 'Pod / apache-982341-2',
+    status: 'Created',
+  },
+  {
+    date: '2024-07-16 18:11:08',
+    sans: 'spiffe://cluster.local/ns/default/sa/authentication',
+    ttl: '18h0m0s',
+    client: 'Pod / nginx-643328-1',
+    status: 'Created',
+  },
+];
+
+// 데이터 삽입 함수
+async function insertData() {
+  try {
+    // logData 삽입
+    const insertedLogData = await LogData.insertMany(logData);
+    console.log('Inserted log data:', insertedLogData);
+
+    // keyData 삽입
+    const insertedKeyData = await KeyData.insertMany(keyData);
+    console.log('Inserted key data:', insertedKeyData);
+  } catch (error) {
+    console.error('Error inserting data:', error);
+  } finally {
+    // 연결 종료
+    mongoose.disconnect();
+  }
+}
+
+// 데이터 삽입 실행
+insertData();
