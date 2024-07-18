@@ -13,14 +13,14 @@ const PORT = process.env.PORT || 5000;
 
 // MongoDB 연결
 mongoose.connect('mongodb://localhost:27017/mydatabase', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+//mongoose.connect('mongodb://admin:1234@10.10.0.102:30027/admin', {
 }).then(() => {
   console.log("MongoDB connected successfully");
 }).catch(err => {
   console.error("MongoDB connection error:", err);
 });
 
+console.log('hello')
 // 로그 데이터 스키마 정의
 const logDataSchema = new mongoose.Schema({
   date: String,
@@ -66,6 +66,7 @@ app.get('/api/logdata', async (req, res) => {
   }
 });
 
+console.log('hello')
 // API 엔드포인트: 모든 키 데이터 가져오기
 app.get('/api/keydata', async (req, res) => {
   try {
@@ -77,6 +78,7 @@ app.get('/api/keydata', async (req, res) => {
   }
 });
 
+console.log('hello')
 // Socket.io 설정
 io.on('connection', (socket) => {
   console.log('a user connected');

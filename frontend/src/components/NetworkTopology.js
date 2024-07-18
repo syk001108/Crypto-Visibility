@@ -28,36 +28,14 @@ const NetworkTopology = ({ nodes, links }) => {
     window.addEventListener('resize', resize);
 
     // Process each link in the provided 'links' array
-    const linkMap = new Map();
-    const newLinks = new Set();
-    const existingUniqueLinks = new Set();
-
-    links.forEach(link => {
-      const key = `${link.source}-${link.destination}`;
-      if (!linkMap.has(key)) {
-        linkMap.set(key, link);
-        newLinks.add(link);
-      } else {
-        const existingLink = linkMap.get(key);
-        if (new Date(link.date) > new Date(existingLink.date)) {
-          linkMap.set(key, link);
-          newLinks.add(link);
-        }
-        existingUniqueLinks.add(existingLink);
-      }
-    });
-
-    // Convert sets back to arrays for filteredLinks
-    const filteredLinks = [...newLinks, ...existingUniqueLinks];
-
     const simulation = d3.forceSimulation(nodes)
-      .force('link', d3.forceLink(filteredLinks).id(d => d.id).distance(200)) // Adjust link distance
-      .force('charge', d3.forceManyBody().strength(-100)) // Adjust node repulsion strength
+      .force('link', d3.forceLink(links).id(d => d.id).distance(200)) // Use links array directly
+      .force('charge', d3.forceManyBody().strength(-80)) // Adjust node repulsion strength
       .force('center', d3.forceCenter(0, 0)) // Center simulation
       .on('tick', ticked);
 
     // Create markers for each link based on encryptionStatus
-    filteredLinks.forEach((link, index) => {
+    links.forEach((link, index) => {
       const color = link.encryptionStatus === 'Insecure' ? '#d4a017' :
                     link.encryptionStatus === 'None' ? 'red' : 'black';
 
@@ -79,7 +57,7 @@ const NetworkTopology = ({ nodes, links }) => {
     const link = svg.append('g')
       .attr('class', 'links')
       .selectAll('path')
-      .data(filteredLinks)
+      .data(links) // Use links array directly
       .enter()
       .append('path')
       .attr('stroke-width', 4)

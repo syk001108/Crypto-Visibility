@@ -1,5 +1,3 @@
-// Topology.js
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { io } from 'socket.io-client';
@@ -15,6 +13,7 @@ const Topology = () => {
   const rowsPerPage = 5;
 
   useEffect(() => {
+    // 데이터 초기 로딩 함수
     const fetchLogData = async () => {
       try {
         const response = await axios.get('http://localhost:5000/api/logdata');
@@ -24,30 +23,63 @@ const Topology = () => {
       }
     };
 
+    // 페이지 로딩 시 데이터 초기 로딩
     fetchLogData();
 
+    // 웹소켓 설정
     const socket = io('http://localhost:5000');
+    
+    // 데이터 변경 시 처리
     socket.on('logDataChange', (changedDocument) => {
       console.log('Log data changed:', changedDocument);
-      // 변경된 데이터를 받아와 state를 업데이트
+
+      // 변경된 데이터를 state에 반영
       setLogData(prevLogData => [changedDocument, ...prevLogData]);
     });
 
+    // 데이터 주기적 업데이트를 위한 Interval 설정
+
+    // 컴포넌트 언마운트 시 웹소켓 및 Interval 정리
     return () => {
       socket.disconnect();
     };
   }, []);
 
-  // Unique nodes와 links 생성 로직 등은 그대로 유지될 수 있습니다.
+  // 데이터 처리 함수: 중복 제거 및 최신 데이터 선택
+  const processLogData = (data) => {
+    // 중복 제거를 위한 Map
+    const logMap = new Map();
 
-  const uniqueNodes = Array.from(new Set(logData.map(item => item.source).concat(logData.map(item => item.destination)))).map((item, index) => ({
+    // 최신 데이터 선택
+    data.forEach(item => {
+      const key = `${item.source}-${item.destination}`;
+      if (!logMap.has(key)) {
+        logMap.set(key, item);
+      } else {
+        // 이미 존재하는 데이터보다 최신인지 비교 후 갱신
+        if (new Date(item.date) > new Date(logMap.get(key).date)) {
+          logMap.set(key, item);
+        }
+      }
+    });
+
+    // Map의 값들만 배열로 변환하여 반환
+    return Array.from(logMap.values());
+  };
+
+  // 최신 데이터를 처리한 후의 로그 데이터
+  const processedLogData = processLogData(logData);
+
+  // 고유 노드 추출
+  const uniqueNodes = Array.from(new Set(processedLogData.map(item => item.source).concat(processedLogData.map(item => item.destination)))).map((item, index) => ({
     id: `Node${index + 1}`,
     name: item
   }));
 
-  const links = logData.map(item => ({
-    source: uniqueNodes.find(node => node.name === item.source).id,
-    target: uniqueNodes.find(node => node.name === item.destination).id,
+  // NetworkTopology로 전달할 links 배열
+  const networkTopologyLinks = processedLogData.map(item => ({
+    source: uniqueNodes.find(node => node.name === item.source),
+    target: uniqueNodes.find(node => node.name === item.destination),
     encryptionStatus: item.encryptionStatus,
     tlsVersion: item.tlsVersion,
     cipherSuite: item.cipherSuite,
@@ -63,7 +95,8 @@ const Topology = () => {
     ],
   }));
 
-  const currentLogs = logData.slice(0, rowsPerPage);
+  // 테이블에 전달할 원본 데이터 배열
+  const originalLogData = logData.slice(0, rowsPerPage);
 
   return (
     <div className="Topology">
@@ -73,7 +106,7 @@ const Topology = () => {
           <h3>Topology</h3>
         </header>
         <div className="Topology-body">
-          <NetworkTopology nodes={uniqueNodes} links={links} />
+          <NetworkTopology nodes={uniqueNodes} links={networkTopologyLinks} />
         </div>
         <div className="CommonLayout">
           <CDBTable responsive>
@@ -91,7 +124,7 @@ const Topology = () => {
                 </tr>
               </CDBTableHeader>
               <CDBTableBody>
-                {currentLogs.map((item, index) => (
+                {originalLogData.map((item, index) => (
                   <tr key={index}>
                     <td>{item.date}</td>
                     <td>{item.source}</td>

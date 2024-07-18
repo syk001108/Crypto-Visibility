@@ -28,20 +28,20 @@ const LogData = mongoose.model('LogData', logDataSchema);
 // 예시 데이터
 const logData = [
   {
-    "date": "2024-07-16 18:19:11",
-    "source": "e",
-    "destination": "f",
-    "encryptionStatus": "Secure",
-    "tlsVersion": "TLS 1.3",
-    "cipherSuite": "TLS_CHACHA20_POLY1305_SHA256",
-    "certSignatureAlgorithm": "33ddd3a",
-    "ellipticCurve": "333addds",
-    "skeSignatureAlgorithm": "",
-    "tlsVersionVulnerability": 0,
-    "cipherSuiteVulnerability": 1,
-    "certSignatureAlgorithmVulnerability": 2,
+    "date": "2024-07-16 18:20:29",
+    "source": "a",
+    "destination": "b",
+    "encryptionStatus": "Insecure",
+    "tlsVersion": "TLS 1.2",
+    "cipherSuite": "TLS_ECdCBC_SHA",
+    "certSignatureAlgorithm": "C",
+    "ellipticCurve": "X25519",
+    "skeSignatureAlgorithm": "ECDSSHA256",
+    "tlsVersionVulnerability": 1,
+    "cipherSuiteVulnerability": 0,
+    "certSignatureAlgorithmVulnerability": 1,
     "ellipticCurveVulnerability": 0,
-    "skeSignatureAlgorithmVulnerability": 1,
+    "skeSignatureAlgorithmVulnerability": 0,
   },
 ];
 
