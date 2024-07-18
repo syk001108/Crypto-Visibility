@@ -42,11 +42,11 @@ const NetworkTopology = ({ nodes, links }) => {
       svg.append('defs').append('marker')
         .attr('id', `arrowhead-${index}`)
         .attr('viewBox', '-0 -5 10 10')
-        .attr('refX', 22)
+        .attr('refX', 28)
         .attr('refY', 0)
         .attr('orient', 'auto')
-        .attr('markerWidth', 5)
-        .attr('markerHeight', 5)
+        .attr('markerWidth', 4)
+        .attr('markerHeight', 4)
         .attr('xoverflow', 'visible')
         .append('svg:path')
         .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
@@ -60,7 +60,7 @@ const NetworkTopology = ({ nodes, links }) => {
       .data(links) // Use links array directly
       .enter()
       .append('path')
-      .attr('stroke-width', 4)
+      .attr('stroke-width', 3)
       .attr('stroke', d => {
         switch (d.encryptionStatus) {
           case 'Insecure':
@@ -82,8 +82,13 @@ const NetworkTopology = ({ nodes, links }) => {
       .enter()
       .append('circle')
       .attr('r', 25) // Node size
-      .attr('fill', 'white')
-      .attr('stroke', 'gray')
+      .attr('fill', d => {
+        return d.name.substring(0, 3) === 'Pod' ? 'lightgray' : 'white'; // Set stroke color to blue if name starts with 'Pod'
+      })
+      .attr('stroke-width', 2)
+      .attr('stroke', d => {
+        return d.name.substring(0, 3) === 'Pod' ? 'gray' : 'lightgray'; // Set stroke color to blue if name starts with 'Pod'
+      })
       .call(drag(simulation));
 
     const label = svg.append('g')

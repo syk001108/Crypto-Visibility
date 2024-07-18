@@ -13,6 +13,7 @@ const PORT = process.env.PORT || 5000;
 
 // MongoDB 연결
 mongoose.connect('mongodb://localhost:27017/mydatabase', {
+//mongoose.connect('mongodb://admin:1234@10.10.0.102:30027/admin', {
 }).then(() => {
   console.log("MongoDB connected successfully");
 }).catch(err => {
