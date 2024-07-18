@@ -16,7 +16,7 @@ const Topology = () => {
     // 데이터 초기 로딩 함수
     const fetchLogData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/logdata');
+        const response = await axios.get('http://10.10.0.151:5000/api/logdata');
         setLogData(response.data.reverse());
       } catch (error) {
         console.error('Error fetching log data:', error);
@@ -27,7 +27,9 @@ const Topology = () => {
     fetchLogData();
 
     // 웹소켓 설정
-    const socket = io('http://localhost:5000');
+    const socket = io('http://10.10.0.151:5000',{
+      cors: { origin: '*' }
+    });
     
     // 데이터 변경 시 처리
     socket.on('logDataChange', (changedDocument) => {

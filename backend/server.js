@@ -53,7 +53,10 @@ const LogData = mongoose.model('LogData', logDataSchema);
 const KeyData = mongoose.model('KeyData', keyDataSchema);
 
 // CORS 설정
-app.use(cors());
+app.use(cors({
+  origin: '*',
+}));
+
 
 // API 엔드포인트: 모든 로그 데이터 가져오기
 app.get('/api/logdata', async (req, res) => {

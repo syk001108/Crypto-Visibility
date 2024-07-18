@@ -14,7 +14,7 @@ const AllLog = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/logdata');
+        const response = await axios.get('http://10.10.0.151:5000/api/logdata');
         setLogData(response.data.reverse());
         setTotalPages(Math.ceil(response.data.length / rowsPerPage));
       } catch (error) {
@@ -24,7 +24,7 @@ const AllLog = () => {
 
     fetchData();
 
-    const socket = io('http://localhost:5000');
+    const socket = io('http://10.10.0.151:5000');
     socket.on('logDataChange', (change) => {
       console.log('Log data changed:', change);
       fetchData();
