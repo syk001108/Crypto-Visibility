@@ -24,7 +24,7 @@ const AllLog = () => {
 
     fetchData();
 
-    const socket = io('http://10.10.0.151:5000');
+    const socket = io('http://10.10.0.151:5000',{transports: ['websocket']});
     socket.on('logDataChange', (change) => {
       console.log('Log data changed:', change);
       fetchData();
@@ -90,7 +90,10 @@ const AllLog = () => {
                   <th>Destination</th>
                   <th>Encryption Status</th>
                   <th>TLS Version</th>
-                  <th>Cipher Suite</th>
+                  <th>Key Exchange</th>
+                  <th>Authentication</th>
+                  <th>Bulk Encryption</th>
+                  <th>Hash</th>
                   <th>Cert Signature Algorithm</th>
                   <th>Elliptic Curve</th>
                   <th>SKE Signature Algorithm</th>
@@ -99,15 +102,18 @@ const AllLog = () => {
               <tbody>
                 {currentLogs.map((item, index) => (
                   <tr key={index}>
-                    <td>{item.date}</td>
-                    <td>{item.source}</td>
-                    <td>{item.destination}</td>
-                    <td>{item.encryptionStatus}</td>
-                    <td>{item.tlsVersion}</td>
-                    <td>{item.cipherSuite}</td>
-                    <td>{item.certSignatureAlgorithm}</td>
-                    <td>{item.ellipticCurve}</td>
-                    <td>{item.skeSignatureAlgorithm}</td>
+                    <td>{item.timestamp}</td>
+                    <td>{item.srcip}</td>
+                    <td>{item.dstip}</td>
+                    <td>{item.encryptionstatus}</td>
+                    <td>{item.tlsversion}</td>
+                    <td>{item.keyexchange}</td>
+                    <td>{item.authentication}</td>
+                    <td>{item.bulkencryption}</td>
+                    <td>{item.hash}</td>
+                    <td>{item.certsignature}</td>
+                    <td>{item.curvename}</td>
+                    <td>{item.skesignature}</td>
                   </tr>
                 ))}
               </tbody>

@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 
 // MongoDB 연결 설정
-mongoose.connect('mongodb://localhost:27017/mydatabase');
+mongoose.connect('mongodb://admin:1234@10.10.0.102:30027/?directConnection=true');
 /*
 // 로그 데이터 스키마 정의
 const logDataSchema = new mongoose.Schema({
