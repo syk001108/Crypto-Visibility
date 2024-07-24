@@ -27,9 +27,7 @@ const Topology = () => {
     fetchLogData();
 
     // 웹소켓 설정
-    const socket = io('http://10.10.0.151:5000',{
-      cors: { origin: '*' }
-    });
+    const socket = io('http://10.10.0.151:5000',{transports: ['websocket']});
     
     // 데이터 변경 시 처리
     socket.on('logDataChange', (changedDocument) => {
@@ -54,12 +52,12 @@ const Topology = () => {
 
     // 최신 데이터 선택
     data.forEach(item => {
-      const key = `${item.source}-${item.destination}`;
+      const key = `${item.srcip}-${item.dstip}`;
       if (!logMap.has(key)) {
         logMap.set(key, item);
       } else {
         // 이미 존재하는 데이터보다 최신인지 비교 후 갱신
-        if (new Date(item.date) > new Date(logMap.get(key).date)) {
+        if (new Date(item.timestamp) > new Date(logMap.get(key).timestamp)) {
           logMap.set(key, item);
         }
       }
@@ -73,27 +71,35 @@ const Topology = () => {
   const processedLogData = processLogData(logData);
 
   // 고유 노드 추출
-  const uniqueNodes = Array.from(new Set(processedLogData.map(item => item.source).concat(processedLogData.map(item => item.destination)))).map((item, index) => ({
+  const uniqueNodes = Array.from(new Set(processedLogData.map(item => item.srcip).concat(processedLogData.map(item => item.dstip)))).map((item, index) => ({
     id: `Node${index + 1}`,
-    name: item
+    name: item,
+    x: Math.random() * 1000, // 임의의 x 좌표값 설정
+    y: Math.random() * 1000  // 임의의 y 좌표값 설정
   }));
 
   // NetworkTopology로 전달할 links 배열
   const networkTopologyLinks = processedLogData.map(item => ({
-    source: uniqueNodes.find(node => node.name === item.source),
-    target: uniqueNodes.find(node => node.name === item.destination),
-    encryptionStatus: item.encryptionStatus,
-    tlsVersion: item.tlsVersion,
-    cipherSuite: item.cipherSuite,
-    certSignatureAlgorithm: item.certSignatureAlgorithm,
-    ellipticCurve: item.ellipticCurve,
-    skeSignatureAlgorithm: item.skeSignatureAlgorithm,
+    srcip: uniqueNodes.find(node => node.name === item.srcip),
+    dstip: uniqueNodes.find(node => node.name === item.dstip),
+    encryptionstatus: item.encryptionstatus,
+    tlsversion: item.tlsversion,
+    keyexchange: item.keyexchange,
+    authentication: item.authentication,
+    bulkencryption: item.bulkencryption,
+    hash: item.hash,
+    certsignature: item.certsignature,
+    curvename: item.curvename,
+    skesignature: item.skesignature,
     metadata: [
-      item.tlsVersionVulnerability,
-      item.cipherSuiteVulnerability,
-      item.certSignatureAlgorithmVulnerability,
-      item.ellipticCurveVulnerability,
-      item.skeSignatureAlgorithmVulnerability
+      item.tlsvervul,
+      item.ciphersuitevul,
+      item.ciphersuitevul,
+      item.ciphersuitevul,
+      item.ciphersuitevul,
+      item.certvul,
+      item.curvevul,
+      item.skesigvul
     ],
   }));
 
@@ -102,8 +108,9 @@ const Topology = () => {
 
   return (
     <div className="Topology">
-      <Sidebar />
+      
       <div className="Topology-content">
+        <Sidebar />
         <header className="Topology-header">
           <h3>Topology</h3>
         </header>
@@ -119,7 +126,10 @@ const Topology = () => {
                   <th>Source</th>
                   <th>Destination</th>
                   <th>TLS Version</th>
-                  <th>Cipher Suite</th>
+                  <th>Key Exchange</th>
+                  <th>Authentication</th>
+                  <th>Bulk Encryption</th>
+                  <th>Hash</th>
                   <th>Cert Signature Algorithm</th>
                   <th>Elliptic Curve</th>
                   <th>SKE Signature Algorithm</th>
@@ -128,14 +138,17 @@ const Topology = () => {
               <CDBTableBody>
                 {originalLogData.map((item, index) => (
                   <tr key={index}>
-                    <td>{item.date}</td>
-                    <td>{item.source}</td>
-                    <td>{item.destination}</td>
-                    <td>{item.tlsVersion}</td>
-                    <td>{item.cipherSuite}</td>
-                    <td>{item.certSignatureAlgorithm}</td>
-                    <td>{item.ellipticCurve}</td>
-                    <td>{item.skeSignatureAlgorithm}</td>
+                    <td>{item.timestamp}</td>
+                    <td>{item.srcip}</td>
+                    <td>{item.dstip}</td>
+                    <td>{item.tlsversion}</td>
+                    <td>{item.keyexchange}</td>
+                    <td>{item.authentication}</td>
+                    <td>{item.bulkencryption}</td>
+                    <td>{item.hash}</td>
+                    <td>{item.certsignature}</td>
+                    <td>{item.curvename}</td>
+                    <td>{item.skesignature}</td>
                   </tr>
                 ))}
               </CDBTableBody>

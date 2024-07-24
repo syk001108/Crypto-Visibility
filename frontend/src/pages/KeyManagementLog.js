@@ -24,7 +24,7 @@ const KeyManagementLog = () => {
 
     fetchData();
 
-    const socket = io('http://10.10.0.151:5000');
+    const socket = io('http://10.10.0.151:5000',{transports: ['websocket']});
     socket.on('keyDataChange', (change) => {
       console.log('Key data changed:', change);
       fetchData();
@@ -86,9 +86,9 @@ const KeyManagementLog = () => {
               <thead>
                 <tr>
                   <th>Date</th>
+                  <th>Client</th>
                   <th>Sans</th>
                   <th>TTL</th>
-                  <th>Client</th>
                   <th>Status</th>
                 </tr>
               </thead>
@@ -96,9 +96,9 @@ const KeyManagementLog = () => {
                 {currentLogs.map((item, index) => (
                   <tr key={index}>
                     <td>{item.date}</td>
+                    <td>{item.client}</td>
                     <td>{item.sans}</td>
                     <td>{item.ttl}</td>
-                    <td>{item.client}</td>
                     <td>{item.status}</td>
                   </tr>
                 ))}

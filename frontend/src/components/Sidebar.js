@@ -1,45 +1,35 @@
-import React from "react";
-import {
-  CDBSidebar,
-  CDBSidebarContent,
-  CDBSidebarHeader,
-  CDBSidebarMenu,
-  CDBSidebarMenuItem
-} from "cdbreact";
-import { NavLink } from "react-router-dom";
+import React, { useState } from "react";
+import { Navbar, Nav, NavDropdown } from "react-bootstrap";
+import { FaChevronDown } from "react-icons/fa";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-const Sidebar = () => {
+const Topbar = () => {
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const handleDropdownToggle = () => {
+    setShowDropdown(!showDropdown);
+  };
+
   return (
-    <div
-      style={{ display: "flex", height: "100%", overflow: "scroll initial" }}
-    >
-      <CDBSidebar textColor="#fff" backgroundColor="#06368e">
-        <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large"></i>}>
-          <a
-            href="/"
-            className="text-decoration-none"
-            style={{ color: "inherit" }}
+    <Navbar bg="dark" variant="dark" expand="lg">
+      <Navbar.Brand href="/">Crypto Visibility</Navbar.Brand>
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      <Navbar.Collapse id="basic-navbar-nav">
+        <Nav className="mr-auto">
+          <NavDropdown
+            title={<span> <FaChevronDown style={{ transition: 'transform 0.3s' }} className={showDropdown ? 'rotate' : ''} /> </span>}
+            id="basic-nav-dropdown"
+            show={showDropdown}
+            onClick={handleDropdownToggle}
           >
-            BoanLab
-          </a>
-        </CDBSidebarHeader>
-
-        <CDBSidebarContent className="sidebar-content">
-          <CDBSidebarMenu>
-            <NavLink exact to="/" activeClassName="activeClicked">
-              <CDBSidebarMenuItem icon="sitemap">Topology</CDBSidebarMenuItem>
-            </NavLink>
-            <NavLink exact to="/alllog" activeClassName="activeClicked">
-              <CDBSidebarMenuItem icon="file-alt">TLS Communication Log</CDBSidebarMenuItem>
-            </NavLink>
-            <NavLink exact to="/keymanagementlog" activeClassName="activeClicked">
-              <CDBSidebarMenuItem icon="key">Key Management Log</CDBSidebarMenuItem>
-            </NavLink>
-          </CDBSidebarMenu>
-        </CDBSidebarContent>
-      </CDBSidebar>
-    </div>
+            <NavDropdown.Item href="/">Overall</NavDropdown.Item>
+            <NavDropdown.Item href="/alllog">SSL/TLS Session</NavDropdown.Item>
+            <NavDropdown.Item href="/keymanagementlog">Key Management</NavDropdown.Item>
+          </NavDropdown>
+        </Nav>
+      </Navbar.Collapse>
+    </Navbar>
   );
 };
 
-export default Sidebar;
+export default Topbar;

@@ -27,6 +27,15 @@ const NetworkTopology = ({ nodes, links }) => {
     // Adjust SVG dimensions on window resize
     window.addEventListener('resize', resize);
 
+    // Define clipping path
+    svg.append('defs').append('clipPath')
+      .attr('id', 'clip')
+      .append('rect')
+      .attr('x', -width / 2)
+      .attr('y', -height / 2)
+      .attr('width', width)
+      .attr('height', height);
+
     // Process each link in the provided 'links' array
     const simulation = d3.forceSimulation(nodes)
       .force('link', d3.forceLink(links).id(d => d.id).distance(200)) // Use links array directly
@@ -34,19 +43,19 @@ const NetworkTopology = ({ nodes, links }) => {
       .force('center', d3.forceCenter(0, 0)) // Center simulation
       .on('tick', ticked);
 
-    // Create markers for each link based on encryptionStatus
+    // Create markers for each link based on encryptionstatus
     links.forEach((link, index) => {
-      const color = link.encryptionStatus === 'Insecure' ? '#d4a017' :
-                    link.encryptionStatus === 'None' ? 'red' : 'black';
+      const color = link.encryptionstatus === 1 ? '#d4a017' :
+                    link.encryptionstatus === 2 ? 'red' : 'black';
 
       svg.append('defs').append('marker')
         .attr('id', `arrowhead-${index}`)
         .attr('viewBox', '-0 -5 10 10')
-        .attr('refX', 28)
+        .attr('refX', 22)
         .attr('refY', 0)
         .attr('orient', 'auto')
-        .attr('markerWidth', 4)
-        .attr('markerHeight', 4)
+        .attr('markerWidth', 5)
+        .attr('markerHeight', 5)
         .attr('xoverflow', 'visible')
         .append('svg:path')
         .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
@@ -56,16 +65,17 @@ const NetworkTopology = ({ nodes, links }) => {
 
     const link = svg.append('g')
       .attr('class', 'links')
+      .attr('clip-path', 'url(#clip)') // Apply clipping path
       .selectAll('path')
       .data(links) // Use links array directly
       .enter()
       .append('path')
-      .attr('stroke-width', 3)
+      .attr('stroke-width', 4)
       .attr('stroke', d => {
-        switch (d.encryptionStatus) {
-          case 'Insecure':
+        switch (d.encryptionstatus) {
+          case 1:
             return '#d4a017'; // Dark yellow
-          case 'None':
+          case 2:
             return 'red';
           default:
             return 'black';
@@ -73,26 +83,27 @@ const NetworkTopology = ({ nodes, links }) => {
       })
       .attr('marker-end', (d, i) => `url(#arrowhead-${i})`) // Attach the corresponding arrowhead marker to the path
       .on('click', (event, d) => showPopup(event, d))
-      .attr('d', d => `M ${d.source.x},${d.source.y} L ${d.target.x},${d.target.y}`);
+      .attr('d', d => `M ${d.srcip.x},${d.srcip.y} L ${d.dstip.x},${d.dstip.y}`);
 
     const node = svg.append('g')
       .attr('class', 'nodes')
-      .selectAll('circle')
+      .attr('clip-path', 'url(#clip)') // Apply clipping path
+      .selectAll('polygon') // @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ polygon here
       .data(nodes)
       .enter()
-      .append('circle')
-      .attr('r', 25) // Node size
-      .attr('fill', d => {
-        return d.name.substring(0, 3) === 'Pod' ? 'lightgray' : 'white'; // Set stroke color to blue if name starts with 'Pod'
-      })
+      .append('polygon')
+      .attr('points', hexagonPoints(25)) // Generate hexagon points
+      .attr('fill', 'white')
       .attr('stroke-width', 2)
       .attr('stroke', d => {
-        return d.name.substring(0, 3) === 'Pod' ? 'gray' : 'lightgray'; // Set stroke color to blue if name starts with 'Pod'
+        return d.name.substring(0, 3) === 'Pod' ? '#06368e' : 'gray'; // Set stroke color to blue if name starts with 'Pod'
       })
+      // .attr('stroke', d => d.name.startsWith('Pod') ? '#06368e' : 'gray')
       .call(drag(simulation));
 
     const label = svg.append('g')
       .attr('class', 'labels')
+      .attr('clip-path', 'url(#clip)') // Apply clipping path
       .selectAll('text')
       .data(nodes)
       .enter()
@@ -106,10 +117,9 @@ const NetworkTopology = ({ nodes, links }) => {
       .attr('y', d => d.y);
 
     function ticked() {
-      link.attr('d', d => `M ${clamp(d.source.x)},${clamp(d.source.y)} L ${clamp(d.target.x)},${clamp(d.target.y)}`);
+      link.attr('d', d => `M ${clamp(d.srcip.x)},${clamp(d.srcip.y)} L ${clamp(d.dstip.x)},${clamp(d.dstip.y)}`);
 
-      node.attr('cx', d => clamp(d.x))
-          .attr('cy', d => clamp(d.y));
+      node.attr('transform', d => `translate(${clamp(d.x)},${clamp(d.y)})`);
 
       label.attr('x', d => clamp(d.x))
            .attr('y', d => clamp(d.y));
@@ -122,7 +132,7 @@ const NetworkTopology = ({ nodes, links }) => {
     function drag(simulation) {
       return d3.drag()
         .on('start', (event, d) => {
-          if (!event.active) simulation.alphaTarget(0.3).restart();
+          if (!event.active) simulation.alphadstip(0.3).restart();
           d.fx = d.x;
           d.fy = d.y;
         })
@@ -131,26 +141,29 @@ const NetworkTopology = ({ nodes, links }) => {
           d.fy = event.y;
         })
         .on('end', (event, d) => {
-          if (!event.active) simulation.alphaTarget(0);
+          if (!event.active) simulation.alphadstip(0);
           d.fx = null;
           d.fy = null;
         });
     }
 
     function showPopup(event, d) {
-      const centerX = (d.source.x + d.target.x) / 2;
-      const centerY = (d.source.y + d.target.y) / 2;
+      const centerX = (d.srcip.x + d.dstip.x) / 2;
+      const centerY = (d.srcip.y + d.dstip.y) / 2;
 
       // Remove existing popups
       svg.selectAll('.popup').remove();
 
       // Data entries to display in popup with vulnerability colors
       const dataEntries = [
-        { label: 'TLS Version', value: d.tlsVersion, vulnerability: d.metadata[0] },
-        { label: 'Cipher Suite', value: d.cipherSuite, vulnerability: d.metadata[1] },
-        { label: 'Signature Algorithm (Cert)', value: d.certSignatureAlgorithm, vulnerability: d.metadata[2] },
-        { label: 'Elliptic Curve', value: d.ellipticCurve, vulnerability: d.metadata[3] },
-        { label: 'Signature Algorithm (Server)', value: d.skeSignatureAlgorithm, vulnerability: d.metadata[4] }
+        { label: 'TLS Version', value: d.tlsversion, vulnerability: d.metadata[0] },
+        { label: 'Key Exchange', value: d.keyexchange, vulnerability: d.metadata[1] },
+        { label: 'Authentication', value: d.authentication, vulnerability: d.metadata[1] },
+        { label: 'Bulk Encryption', value: d.bulkencryption, vulnerability: d.metadata[1] },
+        { label: 'Hash', value: d.hash, vulnerability: d.metadata[1] },
+        { label: 'Signature Algorithm (Cert)', value: d.certsignature, vulnerability: d.metadata[2] },
+        { label: 'Elliptic Curve', value: d.curvename, vulnerability: d.metadata[3] },
+        { label: 'Signature Algorithm (Server)', value: d.skesignature, vulnerability: d.metadata[4] }
       ];
 
       // Calculate maximum text width dynamically
@@ -207,12 +220,20 @@ const NetworkTopology = ({ nodes, links }) => {
       });
     }
 
-    // Cleanup function
+    function hexagonPoints(size) {
+      const angle = Math.PI / 3;
+      return d3.range(0, 6).map(i => {
+        const x = size * Math.cos(angle * i);
+        const y = size * Math.sin(angle * i);
+        return [x, y].join(',');
+      }).join(' ');
+    }
+
+    // Clean up event listeners on component unmount
     return () => {
-      simulation.stop();
       window.removeEventListener('resize', resize);
     };
-  }, [nodes, links]);
+  }, [nodes, links, width, height]);
 
   return <svg ref={svgRef}></svg>;
 };
