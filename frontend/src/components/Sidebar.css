@@ -1,4 +1,9 @@
 /* Sidebar.css */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+.cdb-sidebar {
+  font-family: "Open Sans", sans-serif;
+}
 
 .sidebar-wrapper {
   display: flex;
@@ -9,4 +14,66 @@
 
 .sidebar-content {
   flex: 1; /* Ensure sidebar content takes remaining height */
+}
+
+/* 상단바 배경색과 텍스트 색상 */
+.custom-navbar {
+  background-color: #06368e; /* 원하는 색상으로 변경 */
+  color: #fff;
+  padding: 10px;
+}
+
+/* 제목 텍스트 색상 */
+.custom-navbar .navbar-brand {
+  color: #fff; /* 제목 텍스트 색상 */
+  font-family: "Open Sans", sans-serif;
+  font-weight: 500;
+  font-style: bold;
+}
+
+.dropdown-text {
+  color: #fff; /* 드롭다운 제목과 메뉴 이름 텍스트 색상 */
+  margin-left: 0.5rem; /* 화살표와 텍스트 사이의 여백 */
+  font-size: 1rem; /* 텍스트 크기 조정 */
+  font-family: "Open Sans", sans-serif;
+  font-weight: 500;
+  font-style: bold;
+}
+
+/* 드롭다운 화살표 */
+.dropdown-title {
+  display: flex;
+  align-items: center;
+  color: #fff; /* 텍스트 색상 */
+}
+
+.dropdown-title .rotate {
+  font-size: 1rem; /* 화살표 크기 조정 */
+  transition: transform 0.3s;
+}
+
+/* 기본 드롭다운 화살표 숨기기 */
+.navbar-nav .dropdown-toggle::after {
+  display: none;
+}
+
+/* 드롭다운 메뉴 스타일 */
+.custom-dropdown .dropdown-menu {
+  background-color: #ffffffd3; /* 드롭다운 메뉴 배경색 */
+  border: none;
+}
+
+.custom-dropdown .dropdown-item {
+  color: #000000; /* 드롭다운 항목 텍스트 색상 */
+  font-family: "Open Sans", sans-serif;
+  font-weight: 500;
+  font-style: bold;
+}
+
+.custom-dropdown .dropdown-item:hover {
+  background-color: #ffffff; /* 드롭다운 항목 호버 색상 */
+}
+
+.rotate {
+  transform: rotate(90deg);
 }

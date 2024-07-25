@@ -31,15 +31,15 @@ const tlsSchema = new mongoose.Schema({
 
 // 키 데이터 스키마 정의
 const keyDataSchema = new mongoose.Schema({
+  date: String,
   client: String,
   sans: String,
   ttl: String,
   status: String,
 });
-
 // MongoDB 모델 생성
 const LogData = mongoose.model('tls', tlsSchema);
-const KeyData = mongoose.model('istio', keyDataSchema);
+const KeyData = mongoose.model('istios', keyDataSchema);
 
 var Mongoose = require('mongoose/lib').Mongoose;
 
@@ -52,11 +52,7 @@ mongoose.connect(dbUri, { useNewUrlParser: true, useUnifiedTopology: true })
 .then(() => {
   console.log("MongoDB connected successfully");
   let listOfCollections = Object.keys(mongoose.connection.collections);
-  let listofDBS = Object.keys(mongoose.connection.db)
-  let listof = Object.keys(mongoose.connection.createCollection)
-  console.log(listOfCollections)
-  console.log(listofDBS)
-  console.log(listof)
+  console.log("Collections:", listOfCollections);
 })
 .catch(err => {
   console.error("MongoDB connection error:", err);
@@ -98,22 +94,20 @@ console.log('hello')
     // console.log(listofDBS)
 
 // API 엔드포인트: 모든 키 데이터 가져오기
-app.get('/api/keydata', cors(), async (req, res) => {
+app.get('/api/keydata', async (req, res) => {
   try {
     const keyData = await KeyData.find(); // 모든 키 데이터를 가져옴
-    let listOfCollections = Object.keys(mongoose.connection.collections);
-    let listofDBS = Object.keys(mongoose.connection.db)
-    console.log(listOfCollections)
-    console.log(listofDBS)
-    mongoose.connection.collection()
-    
-    console.log(keyData)
+    console.log(KeyData.modelName)
+    console.log(keyData.db)
+    console.log(LogData.modelName)
+    console.log(LogData.db)
     res.json(keyData); // 클라이언트에게 JSON 형식으로 응답
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server Error' });
   }
 });
+
 
 console.log('hello')
 // Socket.io 설정
