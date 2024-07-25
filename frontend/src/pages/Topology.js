@@ -9,7 +9,7 @@ import { CDBTable, CDBTableHeader, CDBTableBody } from "cdbreact";
 
 const Topology = () => {
   const [logData, setLogData] = useState([]);
-  const [currentPage] = useState(1);
+  // const [currentPage] = useState(1);
   const rowsPerPage = 5;
 
   useEffect(() => {
